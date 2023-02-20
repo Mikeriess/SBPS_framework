@@ -1,0 +1,9 @@
+name: Portable_PPS
+dependencies:
+  - python=3.8
+  - numpy
+  - pandas
+  - matplotlib
+  - seaborn
+  - jupyter
+  - spyder
