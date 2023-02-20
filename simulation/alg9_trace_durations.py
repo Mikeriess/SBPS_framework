@@ -103,6 +103,7 @@ def Generate_time_variables(Theta = [["a","b","END"],                   #the gen
         #############################
         X = [] #activity START
         Y = [] #activity END
+
         B = [] #process stability offset
         H = [] #resource availability offset
         Q = [] #time since monday
@@ -110,6 +111,9 @@ def Generate_time_variables(Theta = [["a","b","END"],                   #the gen
         V = [] #activity duration
         Z = []
         
+        starttimes = [] #starttime in continuous time
+        endtimes = [] #endtime in continuous time
+
         """
         ############################################################
         """
@@ -122,13 +126,13 @@ def Generate_time_variables(Theta = [["a","b","END"],                   #the gen
             ARRIVAL TIME:
             """
             if t == 0:
-                x_t = z_i
+                n_t = z_i
                 y_t = 0
                 
             if t > 0:
-                x_t = Y[t-1]
+                n_t = n_t + Y[t-1]
                 
-            X.append(x_t)
+            X.append(n_t)
             Z.append(z_i)
             
             """
@@ -136,10 +140,12 @@ def Generate_time_variables(Theta = [["a","b","END"],                   #the gen
                 Delays due to no resource available instantly
             """
             h_t = Resource_offset(h = 0, 
-                                m = settings["resource_availability_m"], 
-                                p = settings["resource_availability_p"], 
-                                n = settings["resource_availability_n"])
+                                    m = settings["resource_availability_m"], 
+                                    p = settings["resource_availability_p"], 
+                                    n = settings["resource_availability_n"])
             H.append(h_t)
+
+
             """
             PROCESS STABILITY
             """
@@ -152,23 +158,17 @@ def Generate_time_variables(Theta = [["a","b","END"],                   #the gen
                         
             B.append(b_t)
             
+
+
             """
             DETERMINISTIC OFFSET:
             """
             
             # all stochastic offsets
             m = h_t + b_t
-            """
-            # Get q_t, the time since monday of this t'th event 
-            q_t = TimeSinceMonday(z_i=z_i, 
-                                  t=t, 
-                                  y=Y, 
-                                  m=m, 
-                                  u=u)
-            """
-                    
+                                
             # get time since monday
-            q_t = np.mod(x_t+m,u)
+            q_t = np.mod(n_t+m,u)
             
             # Append to final data
             Q.append(q_t)
@@ -195,13 +195,21 @@ def Generate_time_variables(Theta = [["a","b","END"],                   #the gen
             """
             TOTAL DURATION
             """
+
+            u_t = h_t + b_t + s_t + v_t
             
-            y_t = x_t + s_t + v_t
-            
-            Y.append(y_t)
+            Y.append(u_t)
             
             y_sum = y_sum + y_t
             y_acc_sum.append(y_sum)
+
+            #continuous time variables used for the timestmaps
+            starttime_t = n_t + h_t + b_t + s_t 
+            endtime_t = starttime_t + v_t
+
+            starttimes.append(starttime_t)
+            endtimes.append(endtime_t)
+
             
         #print("Trace:",trace)
         #print("Trace durations:",Y)
@@ -210,17 +218,21 @@ def Generate_time_variables(Theta = [["a","b","END"],                   #the gen
         
         #updated variable names to match paper (19/02)
         case_times = {"caseid":idx,
-                      "n_t":X,                      #arrival times
+
+                      "z_t":Z,            #offset since beginning (arrival time of trace)
+
+                      "n_t":X,                      #arrival times (start/ready time of activity)
                       "u_t":Y,                      #duration plus offsets
                       "y_acc_sum":y_acc_sum,        #accumulated durations
                       
-                      "z_t":Z,            #offset since beginning
                       
                       "h_t":H,            #resource offset
                       "b_t":B,            #stability offset
                       "q_t":Q,            #time since monday (point in week)
                       "s_t":S,            #calendar-based deterministic offset
-                      "v_t":V}        #activity durations only
+                      "v_t":V,
+                      "starttime":starttimes,
+                      "endtime":endtimes}        #activity durations only
         
         Y_container.append(case_times)
         

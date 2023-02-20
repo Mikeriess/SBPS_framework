@@ -6,6 +6,14 @@ Created on Tue Nov  9 13:03:27 2021
 @author: mikeriess
 """
 
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Nov  6 20:23:43 2021
+
+@author: Mike
+"""
+
+
 def Generate_eventlog(SIM_SETTINGS):
     """
     
@@ -172,6 +180,7 @@ def Generate_eventlog(SIM_SETTINGS):
     evlog_df['end_datetime'] = evlog_df['end_datetime'] + pd.offsets.DateOffset(hours=-6)
 
     # turn clock -4 days back (so week starts at monday)
+
     evlog_df['arrival_datetime'] = evlog_df['arrival_datetime'] + pd.offsets.DateOffset(days=-3)
     evlog_df['start_datetime'] = evlog_df['start_datetime'] + pd.offsets.DateOffset(days=-3)
     evlog_df['end_datetime'] = evlog_df['end_datetime'] + pd.offsets.DateOffset(days=-3)
@@ -181,6 +190,46 @@ def Generate_eventlog(SIM_SETTINGS):
     evlog_df['start_day'] = evlog_df['start_datetime'].dt.day_name()
     evlog_df['start_hour'] = evlog_df['start_datetime'].apply(lambda x: x.hour)
 
+
+
+
+
+    #import datetime
+    #evlog_df['arrival_datetime'] = evlog_df['arrival_datetime'].strftime('%Y-%m-%d')
+    #evlog_df['arrival_datetime'] = evlog_df['arrival_datetime'].replace(year=year_offset).strftime('%Y-%m-%d')
+    
+    #evlog_df['start_datetime']
+    #evlog_df['end_datetime']
+
+ 
+
+    # copy the column
+    
+    """
+    Generate arrival time
+    """
+    #evlog_df['arrival_datetime'] = (evlog_df["n_t"] + weekday_offset)*time_conversion
+    #evlog_df['arrival_datetime'] = evlog_df['arrival_datetime'].astype('datetime64[s]') #%yyyy-%mm-%dd %hh:%mm:%ss
+        
+    """
+    Generate activity start time
+    """
+    
+    #evlog_df['start_datetime'] = ((evlog_df["Y"] - evlog_df["v_t"]) + weekday_offset)*time_conversion
+    #evlog_df['start_datetime'] = ((evlog_df["q_t"] + evlog_df["s_t"]) + weekday_offset)*time_conversion
+    #evlog_df['start_datetime'] = evlog_df['start_datetime'].astype('datetime64[s]')
+    
+    """
+    Generate activity end time
+    """
+    
+    #evlog_df['end_datetime'] = (evlog_df["u_t"] + weekday_offset)*time_conversion
+    #evlog_df['end_datetime'] = evlog_df['end_datetime'].astype('datetime64[s]')
+ 
+    
+    # control: get day of week of beginning work
+    #evlog_df['start_day'] = evlog_df['start_datetime'].dt.day_name()
+    #evlog_df['start_hour'] = evlog_df['start_datetime'].apply(lambda x: x.hour)
     
     if save_eventlog == True:
         evlog_df.to_csv("results/"+str(run)+"_Eventlog_"+process_entropy+"_"+process_type+".csv",
