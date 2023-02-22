@@ -5,16 +5,6 @@ Created on Mon Nov  1 17:21:24 2021
 @author: Mike
 """
 
-"""
-Generation of a synthetic transition vector P0
-"""
-
-
-
-
-
-    
-    
 def GenerateInitialProb(D=["a","b"], p0_type="regular"):
     import numpy as np
     import pandas as pd
@@ -49,10 +39,3 @@ def GenerateInitialProb(D=["a","b"], p0_type="regular"):
         #P_0_df.columns = D
         
     return P0#P_0_df
-
-
-#D = ["a","b","c","d"]
-
-#P0 = GenerateInitialProb(D)
-
-#P_0_df

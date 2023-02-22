@@ -38,8 +38,3 @@ def Generate_trace_arrivals(lambd = 1, n_arrivals=10):
         z.append(t)
         
     return theta, z
-
-
-
-#theta, z = Generate_trace_arrivals(lambd = 1, n_arrivals=10)
-#theta

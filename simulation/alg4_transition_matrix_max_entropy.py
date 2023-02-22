@@ -45,22 +45,3 @@ def Generate_transition_matrix_max_ent(D = ["a","b","c"]):
     P_df.columns = D_orig
     return P_df
 
-
-
-#P_df = Generate_transition_matrix_max_ent(D = ["a","b","c","d"])
-#P_df
-
-"""
-#################################################################################
-
-Problem: Absorbing state is not present in the transition matrix
-
-"""
-
-
-#Generate_transition_matrix_max_ent(D = ["a","b","c","e","f"])
-
-
-
-
-

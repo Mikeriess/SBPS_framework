@@ -146,9 +146,7 @@ def Deterministic_offset(W, q_t):
     b : Deterministic offset to the activity
 
     """
-    
-    
-    
+            
     W = np.array(W)
     W = np.reshape(W,(2, len(W[0]) )).T
 
@@ -167,8 +165,7 @@ def Deterministic_offset(W, q_t):
     """
     Vectorized version
     """
-    
-        
+            
     #evaluate logic and generate a binary vector 
     mask = ((W[:,0] <= q_t) & (q_t< W[:,1]))*1
     
