@@ -1,10 +1,12 @@
 # SBPS_framework
  
 # Requirements
+- Python 3.8
 - Numpy
 - Pandas
 - Pomegranate (install from pip only)
 - Pm4py (install from pip only)
+- Seaborn
 
 # Files
 - simulation_experiment.ipynb
